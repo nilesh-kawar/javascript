@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+    <!-- <script src='main.js'></script> -->
+</head>
+<body>
+    
+    <script>
+
+        var d = new Date();
+        document.write(d + "<br>");
+
+        var day = d.getDay();
+        document.write("Day: " + day + "<br>");
+
+        var datee = d.getDate();
+        document.write("Date: " + datee + "<br>");
+
+        // In js months starts from 0 and ends 11 eg 0--> Jan 11-->Dec
+        var month = d.getMonth() + 1; 
+        document.write("Month: " + month + "<br>");
+
+        var year = d.getFullYear();
+        document.write("Year: " + year + "<br>");
+
+        var hours = d.getHours();
+        document.write("Hours: " + hours + "<br>");
+
+        var min = d.getMinutes();
+        document.write("Minutes: " + min + "<br>");
+
+        var sec = d.getSeconds();
+        document.write("Seconds: " + sec + "<br>");
+
+
+    </script>
+
+<h4>Delievry</h4>
+<span id="month1"> </span>/<span id="datefrom"></span>/ <span id="year1 "></span> - <span id="month2"> </span>/<span id="dateto"></span>/ <span id="year2 "></span>
+
+
+<script>
+
+    var d = new Date();
+    var month1 = document.getElementById("month1").innerHTML = d.getMonth() + 1;
+    var month2 = document.getElementById("month2").innerHTML = d.getMonth() + 1;
+    var datefrom = document.getElementById("datefrom").innerHTML = d.getDate() + 4;
+    var dateto = document.getElementById("dateto").innerHTML = d.getDate() + 7;
+    var year1 = document.getElementById("year1").innerHTML = d.getFullYear();
+    var year2 = document.getElementById("ye").innerHTML = d.getFullYear();
+
+    document.write(d.getFullYear());
+
+    var year = d.getFullYear();
+        document.write("Year: " + year + "<br>");
+
+    // var datefrom = d.getDate() + 4;
+    // var dateto = d.getDate() + 7;
+    // var month = d.getMonth() + 1; 
+    // var year = d.getFullYear();
+
+
+
+
+
+</script>
+
+</body>
+</html>

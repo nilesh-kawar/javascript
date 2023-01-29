@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <p id="showtime"></p>
+
+    <button onclick="clearInterval(change)">STOP</button>
+
+    
+
+    <script>
+        
+        var change = setInterval(myfun, 1000);
+
+        var showalert = setTimeout(alertfun, 5000);
+
+        function alertfun(){
+            alert("Dynamic clock")
+        }
+
+        function myfun(){
+            var d = new Date();
+            var timeOnly = d.toLocaleTimeString();
+            document.getElementById("showtime").innerHTML = timeOnly;
+        }
+    </script>
+</body>
+</html>

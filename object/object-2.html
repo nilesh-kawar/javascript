@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Object 2</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	
+	var player = new Object();
+
+	player = {
+		name: "Nilesh Kawar",
+		kills: 25,
+		kd: 10.00,
+		views: 0,
+		updateViews: function() { 					//annanymous function
+			return ++player.views;				//increase view +1 when call
+		}
+	}
+
+	console.log(player.views); 			//output views: 0
+	console.log(player.updateViews()); //ye views update karega +1 se 
+	console.log(player.views);			//output views: 1
+	console.log(player);
+
+</script>
+
+</body>
+</html>

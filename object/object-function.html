@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Function FUnction</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	
+	// var student = new Object();
+
+	function Student(name, roll, standard, pass, views){
+		this.name = name;
+		this.roll = roll;
+		this.standard = standard;
+		this.pass = pass;
+		this.views = views;
+		this.updateViews = function(){
+			return this.student.views++;
+		}
+	}
+
+	student01 = new Student("Nilesh Kawar", 1, 15, true, 1);
+
+	console.log(student01);
+
+	student02 = new Student("Nilesh Kawar2", 2, 15, false, 4);
+
+	console.log(student02);
+
+</script>
+
+</body>
+</html>

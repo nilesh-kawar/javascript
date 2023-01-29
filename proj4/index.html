@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li> span {
+            float: right;
+        }
+
+        .checked{
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <input type="text" class="text">
+        <button class="add">ADD</button>
+        <br><br>
+        <ul class="list">
+            <li>hey <span>×</span></li>
+        </ul>
+    </div>
+</body>
+</html>
+
+<script>
+
+    function addContent() {
+        
+        var ul = document.querySelector("ul");
+        var li = document.createElement("li");
+        var inputText = document.querySelector(".text").value;
+        var text = document.createTextNode(inputText);
+        li.classList.add("listElements");
+
+        if(inputText === ""){
+            alert("Kuchh toh likh bhai");
+            return false;
+        } else{
+            ul.appendChild(li);
+            li.appendChild(text);
+        }
+        
+        //create close button and assign class "close"
+        var span = document.createElement("span");
+        var deleteIcon = document.createTextNode("\u00D7")
+        span.className = "close";
+        span.appendChild(deleteIcon);
+        li.appendChild(span);
+
+        //click on close button to hide specific element
+        // var close = document.getElementsByClassName("close");
+        
+        // for (let i = 0; i < close.length; i++) { 
+        //     close[i].onclick = function() {
+        //         var div = this.parentElement;
+        //         div.style.display = "none";
+        //     }
+        // }
+
+        //click on list item to check
+        // var mainList = document.getElementsByClassName("listElements");
+        // for (let i = 0; i < mainList.length; i++) { 
+        //     console.log(mainList[i]);
+
+        //     mainList[i].addEventListener("click", function() {
+        //         var div = mainList[i];
+        //         div.style.textDecoration = "line-through";
+        //     })
+        // }
+        
+        function clearField(){
+            var inputText = document.querySelector(".text").value = "";
+        }
+        clearField();
+    }
+
+    var ul = document.querySelector("ul");
+    // ul.addEventListener("click", function(event){
+    //     if(event.target.tagName === 'LI'){
+    //         event.target.classList.toggle('checked');
+    //     }
+    // }, false);
+
+
+    function deleteCheck(e){
+        const item = e.target;
+        // console.log(e.target);
+
+        if(item.classList[0] === 'close'){
+            const close = item.parentElement;
+            close.remove();
+        }
+    }
+
+    function checkDelete(e){
+        const item = e.target;
+        // console.log(e.target);
+
+        if(item.classList[0] === 'listElements'){
+            item.classList.toggle("checked");
+        }
+    }
+    
+    ul.addEventListener("click", deleteCheck);
+    ul.addEventListener("click", checkDelete);
+
+    const addBtn = document.querySelector(".add");
+    addBtn.addEventListener("click", addContent)
+
+</script>
+
