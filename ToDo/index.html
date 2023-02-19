@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        body{
+            background-color: #ededed!important;
+        }
+        .table{
+            border: 1px solid #dbd8d8;
+            font-weight: 600;
+        }
+        #alertMsg{
+            font-weight: 600;
+        }
+        .todo_box{
+            box-shadow: 5px 5px 0px 1px #bbb;
+        }
+        td{
+            max-width: 140px;
+            overflow-wrap: break-word;
+        }
+        tr{
+            vertical-align: middle;
+        }
+        .hidden{
+            display: none!important;
+        }
+        .active{
+            display: block!important;
+        }
+    </style>
+    <!-- Bootstrap 5  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- FontAwesome 6.3  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <h1 class="text-center mt-5">Todo List</h1>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- [+]Active Todos -->
+            <div class="col-lg-6 col-md-12 col-12 my-3">
+                <div class="todo_box ">
+                    <div class="heading border p-3 bg-light">
+                        <h5>Todos (5)</h5>
+                    </div>
+                    <div class="todo_content p-3 bg-white border">
+                        <!-- input box  -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter todo here" aria-label="Enter todo here" aria-describedby="button-addon2" id="todo_input" required>
+                                <button class="btn btn-primary " type="button" id="todo_addBtn">Submit</button>
+                                <button class="btn btn-success hidden todo_updateBtn" type="button" onclick="updateTodo(this)">Update</button>
+                            </div>
+                            <p class="text-center text-danger mt-2 " id="alertMsg"></p>
+                        </div>
+                        <div class="todo_list">
+                            <table class="table table-striped">
+                                <tbody id="todo_list">
+
+                                </tbody>
+                              </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           <!--  [+] Deleted Todos -->
+            <div class="col-lg-6 col-md-12 col-1 my-3">
+                <div class="todo_box ">
+                    <div class="heading border p-3 bg-light">
+                        <h5>Deleted Todos (5)</h5>
+                    </div>
+                    <div class="todo_content p-3 bg-white border">
+                        <div class="todo_list">
+                            <table class="table table-striped ">
+                                <thead>
+                                    <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col"></th>
+                                      <th scope="col">Date Time Created At</th>
+                                      <th scope="col">Date Time Deleted At</th>
+                                    </tr>
+                                  </thead>
+                                <tbody id="deleted_todo">
+
+                                </tbody>
+                              </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+
+        // Selectors 
+        const todoInput = document.getElementById('todo_input');
+        const todoBtn = document.getElementById('todo_addBtn');
+        const todoDelete = document.getElementById('delete_todo');
+        const alertMsg = document.getElementById('alertMsg');
+        const todoList = document.getElementById('todo_list');
+        const deletedTodo = document.getElementById('deleted_todo');
+        const todoUpdateBtn = document.querySelector(".todo_updateBtn");
+
+        //global variables
+        const todos = [];
+        let deletedTodoList = [];
+        //validation config file
+        const config = {
+            min: 3,
+            max: 80
+        }
+        
+        // Validate functions ----------->
+        const validate = () => {
+            // Validation --->
+           if(todoInput.value == '' || todoInput.value == null ){
+                alertMsg.innerHTML = 'You must write something!!'
+                return false;
+           }
+           if(todoInput.value.length < config.min){
+                alertMsg.innerHTML = 'Type minimum 10 characters'
+                return false;
+           }
+           if(todoInput.value.length > config.max){
+                alertMsg.innerHTML = 'Type maximum 80 characters'
+                return false;
+           }
+           alertMsg.innerHTML = ''
+           return true;
+        }
+
+        // Get Current time and Date 
+        const getCurrentDateTime = () => {
+            let date = new Date();
+            let current_date = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+ date.getDate();
+            let current_time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
+            // var current_time = date.getHours()+":"+date.getMinutes();
+            let date_time = current_date+" <i class='fa-solid fa-clock px-1'></i>"+current_time;
+            return date_time;
+        }
+
+        // Render TODO's HTML 
+        const renderActiveTodo = () => {
+            let i = 0;
+            todoList.innerHTML = todos.map(todo => 
+                `<tr> 
+                    <th scope="row">${++i}</th>
+                    <td>${todo.comment}</td>
+                    <td class="text-center">${todo.created_at}</td>
+                    <td class="text-end">
+                        <button class="btn btn-success edit_todo" id="${todo.id}" onclick="editTodo(this)"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn btn-danger delete_todo" id="${todo.id}" onclick="deleteTodo(this)"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`
+            ).join('')
+        }
+        const renderDeletedTodo = () => {
+            let i = 0;
+            deletedTodo.innerHTML = deletedTodoList.map(todo => 
+                `<tr>
+                    <th scope="row">${++i}</th>
+                    <td>${todo.comment}</td>
+                    <td>${todo.created_at}</td>
+                    <td>${todo.deleted_at}</td>
+                </tr>`
+            ).join('')
+        }
+
+        // Add New TODO 
+        const addTodo = () => {
+            if(validate()){
+                let comment = todoInput.value;
+                todos.push({
+                    id: new Date().getTime(),
+                    created_at: getCurrentDateTime(),
+                    comment: comment,
+                    //modified_at: new Date(),
+                    // deleted_at: new Date()
+                })
+                renderActiveTodo();
+                todoInput.value = '';
+            }else{
+                validate();
+            }
+        }
+
+        // Update Todo 
+        const updateTodo = (el) => {
+            const updatedTodoText = todoInput.value;
+            todos.map(todo => {
+                if(todo.id == el.id){
+                    const todoEdit = document.getElementById(el.id);
+
+                    todo.comment = updatedTodoText;
+                    todo.modified_at = getCurrentDateTime()
+                    //Hide Edit button after one update-->
+                    console.log(todo);
+                }
+            })
+            renderActiveTodo();
+            todoUpdateBtn.classList.remove("active");
+            todoBtn.classList.remove("hidden");
+            todoInput.value= '';
+        }
+
+        // Edit Todo 
+        const editTodo = (el) => {
+            todoUpdateBtn.classList.add("active");
+            todoBtn.classList.add("hidden");
+            todos.map(todo => {
+                if(todo.id == el.id){
+                    todoInput.value = todo.comment;
+                    todoUpdateBtn.id = el.id;
+                }
+            })
+
+        }
+
+        // Delete Todo 
+        const deleteTodo = (el) => {
+            for (let i = 0; i < todos.length; i++) {
+            if (todos[i].id == el.id) {
+                todos[i].deleted_at = getCurrentDateTime();
+                deletedTodoList.push(todos.splice(i, 1));
+                i--;
+            }}
+            renderActiveTodo();
+            deletedTodoList = deletedTodoList.flat();
+            // console.log(deletedTodoList);
+            renderDeletedTodo();
+        }
+
+
+        // EventListners
+        todoBtn.addEventListener('click', addTodo);
+    </script>
+
+
+
+    <!-- bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
